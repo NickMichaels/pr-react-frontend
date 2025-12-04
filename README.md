@@ -12,7 +12,6 @@ React frontend application for the Patient Referral App.
 ## Installation
 
 ```bash
-cd frontend
 npm install
 ```
 
