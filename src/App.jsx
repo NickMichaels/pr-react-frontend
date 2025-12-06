@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './components/Login'
 import ProvidersList from './components/ProvidersList'
+import ProviderForm from './components/ProviderForm'
 import { getToken } from './utils/auth'
 
 function App() {
@@ -46,6 +47,26 @@ function App() {
           element={
             isAuthenticated ? (
               <ProvidersList onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/providers/new"
+          element={
+            isAuthenticated ? (
+              <ProviderForm onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/providers/:id/edit"
+          element={
+            isAuthenticated ? (
+              <ProviderForm onLogout={handleLogout} />
             ) : (
               <Navigate to="/login" replace />
             )

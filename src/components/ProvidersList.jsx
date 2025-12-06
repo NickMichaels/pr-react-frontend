@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getToken } from '../utils/auth'
 //import './ProvidersList.css'
 
 function ProvidersList({ onLogout }) {
+  const navigate = useNavigate()
   const [providers, setProviders] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -78,7 +80,16 @@ function ProvidersList({ onLogout }) {
       </nav>
 
 
-      <div class="container-fluid">
+      <div class="container-fluid mt-4">
+        <div class="mb-3">
+          <button
+            onClick={() => navigate('/providers/new')}
+            class="btn btn-primary"
+          >
+            Create New Provider
+          </button>
+        </div>
+
         {loading && (
           <div className="loading-message">Loading providers...</div>
         )}
@@ -108,12 +119,20 @@ function ProvidersList({ onLogout }) {
               </thead>
               <tbody>
                 {providers.map((provider) => (
-                  <tr>
+                  <tr key={provider.id}>
                     <td scope="row">{provider.name}</td>
                     <td>
-                      <a href="#">show</a>&nbsp;
-
-                      <a href="#">edit</a>
+                      <a href="#">view</a>&nbsp;
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          navigate(`/providers/${provider.id}/edit`)
+                        }}
+                      >
+                        edit
+                      </a>
+                      <a href="#">delete</a>&nbsp;
                     </td>
 
                   </tr>
