@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getToken } from '../utils/auth'
-import './ProvidersList.css'
+//import './ProvidersList.css'
 
 function ProvidersList({ onLogout }) {
   const [providers, setProviders] = useState([])
@@ -14,7 +14,7 @@ function ProvidersList({ onLogout }) {
   const fetchProviders = async () => {
     setLoading(true)
     setError('')
-    
+
     try {
       const token = getToken()
       if (!token) {
@@ -56,15 +56,29 @@ function ProvidersList({ onLogout }) {
   }
 
   return (
-    <div className="providers-container">
-      <header className="providers-header">
-        <h1>Healthcare Providers</h1>
-        <button onClick={onLogout} className="logout-button">
-          Logout
-        </button>
-      </header>
+    <div class="container-fluid">
+      <nav class="navbar bg-primary navbar-expand-lg" data-bs-theme="dark">
 
-      <div className="providers-content">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Patient Referrals</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">All Healthcare Providers</a>
+              </li>
+            </ul>
+            <button onClick={onLogout} class="btn btn-primary">
+              Logout
+            </button>
+          </div>
+        </div>
+      </nav>
+
+
+      <div class="container-fluid">
         {loading && (
           <div className="loading-message">Loading providers...</div>
         )}
@@ -72,7 +86,7 @@ function ProvidersList({ onLogout }) {
         {error && (
           <div className="error-message">
             {error}
-            <button onClick={fetchProviders} className="retry-button">
+            <button onClick={fetchProviders} class="btn btn-primary">
               Retry
             </button>
           </div>
@@ -83,50 +97,29 @@ function ProvidersList({ onLogout }) {
         )}
 
         {!loading && !error && providers.length > 0 && (
-          <div className="providers-grid">
-            {providers.map((provider) => (
-              <div key={provider.id} className="provider-card">
-                <h2 className="provider-name">{provider.name}</h2>
-                {provider.specialty && (
-                  <div className="provider-specialty">{provider.specialty}</div>
-                )}
-                <div className="provider-details">
-                  <div className="detail-row">
-                    <span className="detail-label">Address:</span>
-                    <span className="detail-value">
-                      {provider.addressLine1}
-                      {provider.addressLine2 && `, ${provider.addressLine2}`}
-                    </span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">City, State ZIP:</span>
-                    <span className="detail-value">
-                      {provider.city}, {provider.state} {provider.zip}
-                    </span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Email:</span>
-                    <span className="detail-value">
-                      <a href={`mailto:${provider.email}`}>{provider.email}</a>
-                    </span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Phone:</span>
-                    <span className="detail-value">
-                      <a href={`tel:${provider.phone}`}>{provider.phone}</a>
-                    </span>
-                  </div>
-                  {provider.createdAt && (
-                    <div className="detail-row">
-                      <span className="detail-label">Created:</span>
-                      <span className="detail-value">
-                        {formatDate(provider.createdAt)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+
+          <div class="container-fluid">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Provider Name</th>
+                  <th scope="col">actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {providers.map((provider) => (
+                  <tr>
+                    <td scope="row">{provider.name}</td>
+                    <td>
+                      <a href="#">show</a>&nbsp;
+
+                      <a href="#">edit</a>
+                    </td>
+
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
