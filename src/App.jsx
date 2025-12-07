@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login'
 import ProvidersList from './components/ProvidersList'
 import ProviderForm from './components/ProviderForm'
+import ProviderView from './components/ProviderView'
 import { getToken } from './utils/auth'
 
 function App() {
@@ -67,6 +68,16 @@ function App() {
           element={
             isAuthenticated ? (
               <ProviderForm onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/providers/:id"
+          element={
+            isAuthenticated ? (
+              <ProviderView onLogout={handleLogout} />
             ) : (
               <Navigate to="/login" replace />
             )

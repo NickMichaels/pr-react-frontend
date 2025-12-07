@@ -122,7 +122,16 @@ function ProvidersList({ onLogout }) {
                   <tr key={provider.id}>
                     <td scope="row">{provider.name}</td>
                     <td>
-                      <a href="#">view</a>&nbsp;
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          navigate(`/providers/${provider.id}`)
+                        }}
+                      >
+                        view
+                      </a>
+                      &nbsp;
                       <a
                         href="#"
                         onClick={(e) => {
@@ -132,7 +141,8 @@ function ProvidersList({ onLogout }) {
                       >
                         edit
                       </a>
-                      <a href="#">delete</a>&nbsp;
+                      &nbsp;
+                      <a href="#">delete</a>
                     </td>
 
                   </tr>
