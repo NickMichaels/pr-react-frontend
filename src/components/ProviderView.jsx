@@ -87,7 +87,7 @@ function ProviderView({ onLogout }) {
   // Enrich referral with names
   const enrichReferral = async (referral) => {
     const enriched = { ...referral }
-    
+
     // Fetch all names in parallel
     const [patientName, sendingProviderName, receivingProviderName, sendingPractitionerName, receivingPractitionerName] = await Promise.all([
       referral.patient ? fetchPatientName(referral.patient) : Promise.resolve(null),
@@ -162,7 +162,7 @@ function ProviderView({ onLogout }) {
         const referralsSentData = await referralsSentResponse.json()
         const referralsArray = Array.isArray(referralsSentData) ? referralsSentData : []
         setReferralsSent(referralsArray)
-        
+
         // Enrich referrals with names
         if (referralsArray.length > 0) {
           setLoadingNames(true)
@@ -187,7 +187,7 @@ function ProviderView({ onLogout }) {
         const referralsReceivedData = await referralsReceivedResponse.json()
         const referralsArray = Array.isArray(referralsReceivedData) ? referralsReceivedData : []
         setReferralsReceived(referralsArray)
-        
+
         // Enrich referrals with names
         if (referralsArray.length > 0) {
           setLoadingNames(true)
@@ -342,7 +342,10 @@ function ProviderView({ onLogout }) {
                     <tr key={practitioner.id}>
                       <td>{practitioner.name || 'N/A'}</td>
                       <td>
-                        <a href="#" onClick={(e) => { e.preventDefault(); }}>
+                        <a href="#" onClick={(e) => {
+                          e.preventDefault()
+                          navigate(`/practitioners/${practitioner.id}`)
+                        }}>
                           view
                         </a>
                         &nbsp;
