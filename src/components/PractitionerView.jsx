@@ -273,7 +273,7 @@ function PractitionerView({ onLogout }) {
                                 </div>
                                 <div class="mt-3">
                                     <button
-                                        onClick={() => navigate(`/practicioners/${id}/edit`)}
+                                        onClick={() => navigate(`/practitioners/${id}/edit`)}
                                         class="btn btn-primary me-2"
                                     >
                                         Edit Practitioner
