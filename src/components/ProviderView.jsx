@@ -5,17 +5,106 @@ import { getToken } from '../utils/auth'
 function ProviderView({ onLogout }) {
   const { id } = useParams()
   const navigate = useNavigate()
-  
+
   const [provider, setProvider] = useState(null)
   const [practitioners, setPractitioners] = useState([])
   const [referralsSent, setReferralsSent] = useState([])
   const [referralsReceived, setReferralsReceived] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [loadingNames, setLoadingNames] = useState(false)
 
   useEffect(() => {
     fetchProviderData()
   }, [id])
+
+  // Helper function to fetch provider name
+  const fetchProviderName = async (providerId) => {
+    if (!providerId) return null
+    try {
+      const token = getToken()
+      const response = await fetch(`http://127.0.0.1:8000/api/providers/${providerId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        return data.name || null
+      }
+    } catch (err) {
+      console.error(`Error fetching provider ${providerId}:`, err)
+    }
+    return null
+  }
+
+  // Helper function to fetch practitioner name
+  const fetchPractitionerName = async (practitionerId) => {
+    if (!practitionerId) return null
+    try {
+      const token = getToken()
+      const response = await fetch(`http://127.0.0.1:8000/api/practicioners/${practitionerId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        return data.name || null
+      }
+    } catch (err) {
+      console.error(`Error fetching practitioner ${practitionerId}:`, err)
+    }
+    return null
+  }
+
+  // Helper function to fetch patient name
+  const fetchPatientName = async (patientId) => {
+    if (!patientId) return null
+    try {
+      const token = getToken()
+      const response = await fetch(`http://127.0.0.1:8000/api/patients/${patientId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        return data.name || null
+      }
+    } catch (err) {
+      console.error(`Error fetching patient ${patientId}:`, err)
+    }
+    return null
+  }
+
+  // Enrich referral with names
+  const enrichReferral = async (referral) => {
+    const enriched = { ...referral }
+    
+    // Fetch all names in parallel
+    const [patientName, sendingProviderName, receivingProviderName, sendingPractitionerName, receivingPractitionerName] = await Promise.all([
+      referral.patient ? fetchPatientName(referral.patient) : Promise.resolve(null),
+      referral.sendingProvider ? fetchProviderName(referral.sendingProvider) : Promise.resolve(null),
+      referral.receivingProvider ? fetchProviderName(referral.receivingProvider) : Promise.resolve(null),
+      referral.sendingPracticioner ? fetchPractitionerName(referral.sendingPracticioner) : Promise.resolve(null),
+      referral.receivingPracticioner ? fetchPractitionerName(referral.receivingPracticioner) : Promise.resolve(null),
+    ])
+
+    enriched.patientName = patientName
+    enriched.sendingProviderName = sendingProviderName
+    enriched.receivingProviderName = receivingProviderName
+    enriched.sendingPractitionerName = sendingPractitionerName
+    enriched.receivingPractitionerName = receivingPractitionerName
+
+    return enriched
+  }
 
   const fetchProviderData = async () => {
     setLoading(true)
@@ -71,7 +160,18 @@ function ProviderView({ onLogout }) {
 
       if (referralsSentResponse.ok) {
         const referralsSentData = await referralsSentResponse.json()
-        setReferralsSent(Array.isArray(referralsSentData) ? referralsSentData : [])
+        const referralsArray = Array.isArray(referralsSentData) ? referralsSentData : []
+        setReferralsSent(referralsArray)
+        
+        // Enrich referrals with names
+        if (referralsArray.length > 0) {
+          setLoadingNames(true)
+          const enrichedReferrals = await Promise.all(
+            referralsArray.map(referral => enrichReferral(referral))
+          )
+          setReferralsSent(enrichedReferrals)
+          setLoadingNames(false)
+        }
       }
 
       // Fetch referrals received
@@ -85,7 +185,18 @@ function ProviderView({ onLogout }) {
 
       if (referralsReceivedResponse.ok) {
         const referralsReceivedData = await referralsReceivedResponse.json()
-        setReferralsReceived(Array.isArray(referralsReceivedData) ? referralsReceivedData : [])
+        const referralsArray = Array.isArray(referralsReceivedData) ? referralsReceivedData : []
+        setReferralsReceived(referralsArray)
+        
+        // Enrich referrals with names
+        if (referralsArray.length > 0) {
+          setLoadingNames(true)
+          const enrichedReferrals = await Promise.all(
+            referralsArray.map(referral => enrichReferral(referral))
+          )
+          setReferralsReceived(enrichedReferrals)
+          setLoadingNames(false)
+        }
       }
 
     } catch (err) {
@@ -271,15 +382,19 @@ function ProviderView({ onLogout }) {
                     referralsSent.map((referral, index) => (
                       <tr key={referral.id || index}>
                         <td>
-                          {referral.patient_name && <div><strong>Patient:</strong> {referral.patient_name}</div>}
-                          {referral.referred_to && <div><strong>Referred To:</strong> {referral.referred_to}</div>}
-                          {referral.referred_from && <div><strong>Referred From:</strong> {referral.referred_from}</div>}
-                          {referral.date && <div><strong>Date:</strong> {new Date(referral.date).toLocaleDateString()}</div>}
+                          {referral.patientName && <div><strong>Patient:</strong> {referral.patientName}</div>}
+                          {!referral.patientName && referral.patient && <div><strong>Patient:</strong> ID: {referral.patient} {loadingNames && '(loading...)'}</div>}
+                          {referral.receivingProviderName && <div><strong>Referred To:</strong> {referral.receivingProviderName}</div>}
+                          {!referral.receivingProviderName && referral.receivingProvider && <div><strong>Referred To:</strong> Provider ID: {referral.receivingProvider} {loadingNames && '(loading...)'}</div>}
+                          {referral.receivingPractitionerName && <div><strong>Receiving Practitioner:</strong> {referral.receivingPractitionerName}</div>}
+                          {!referral.receivingPractitionerName && referral.receivingPracticioner && <div><strong>Receiving Practitioner:</strong> ID: {referral.receivingPracticioner} {loadingNames && '(loading...)'}</div>}
+                          {referral.sendingProviderName && <div><strong>Sending Provider:</strong> {referral.sendingProviderName}</div>}
+                          {!referral.sendingProviderName && referral.sendingProvider && <div><strong>Sending Provider:</strong> Provider ID: {referral.sendingProvider} {loadingNames && '(loading...)'}</div>}
+                          {referral.sendingPractitionerName && <div><strong>Sending Practitioner:</strong> {referral.sendingPractitionerName}</div>}
+                          {!referral.sendingPractitionerName && referral.sendingPracticioner && <div><strong>Sending Practitioner:</strong> ID: {referral.sendingPracticioner} {loadingNames && '(loading...)'}</div>}
+                          {referral.dateSent && <div><strong>Date Sent:</strong> {new Date(referral.dateSent).toLocaleDateString()}</div>}
                           {referral.status && <div><strong>Status:</strong> {referral.status}</div>}
                           {referral.reason && <div><strong>Reason:</strong> {referral.reason}</div>}
-                          {!referral.patient_name && !referral.referred_to && !referral.date && (
-                            <div>{JSON.stringify(referral)}</div>
-                          )}
                         </td>
                       </tr>
                     ))
@@ -306,15 +421,19 @@ function ProviderView({ onLogout }) {
                     referralsReceived.map((referral, index) => (
                       <tr key={referral.id || index}>
                         <td>
-                          {referral.patient_name && <div><strong>Patient:</strong> {referral.patient_name}</div>}
-                          {referral.referred_to && <div><strong>Referred To:</strong> {referral.referred_to}</div>}
-                          {referral.referred_from && <div><strong>Referred From:</strong> {referral.referred_from}</div>}
-                          {referral.date && <div><strong>Date:</strong> {new Date(referral.date).toLocaleDateString()}</div>}
+                          {referral.patientName && <div><strong>Patient:</strong> {referral.patientName}</div>}
+                          {!referral.patientName && referral.patient && <div><strong>Patient:</strong> ID: {referral.patient} {loadingNames && '(loading...)'}</div>}
+                          {referral.sendingProviderName && <div><strong>Referred From:</strong> {referral.sendingProviderName}</div>}
+                          {!referral.sendingProviderName && referral.sendingProvider && <div><strong>Referred From:</strong> Provider ID: {referral.sendingProvider} {loadingNames && '(loading...)'}</div>}
+                          {referral.sendingPractitionerName && <div><strong>Sending Practitioner:</strong> {referral.sendingPractitionerName}</div>}
+                          {!referral.sendingPractitionerName && referral.sendingPracticioner && <div><strong>Sending Practitioner:</strong> ID: {referral.sendingPracticioner} {loadingNames && '(loading...)'}</div>}
+                          {referral.receivingProviderName && <div><strong>Receiving Provider:</strong> {referral.receivingProviderName}</div>}
+                          {!referral.receivingProviderName && referral.receivingProvider && <div><strong>Receiving Provider:</strong> Provider ID: {referral.receivingProvider} {loadingNames && '(loading...)'}</div>}
+                          {referral.receivingPractitionerName && <div><strong>Receiving Practitioner:</strong> {referral.receivingPractitionerName}</div>}
+                          {!referral.receivingPractitionerName && referral.receivingPracticioner && <div><strong>Receiving Practitioner:</strong> ID: {referral.receivingPracticioner} {loadingNames && '(loading...)'}</div>}
+                          {referral.dateSent && <div><strong>Date Sent:</strong> {new Date(referral.dateSent).toLocaleDateString()}</div>}
                           {referral.status && <div><strong>Status:</strong> {referral.status}</div>}
                           {referral.reason && <div><strong>Reason:</strong> {referral.reason}</div>}
-                          {!referral.patient_name && !referral.referred_to && !referral.date && (
-                            <div>{JSON.stringify(referral)}</div>
-                          )}
                         </td>
                       </tr>
                     ))
