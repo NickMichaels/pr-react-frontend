@@ -134,11 +134,6 @@ function PractitionerView({ onLogout }) {
             const practitionerData = await practitionerResponse.json()
             setPractitioner(practitionerData)
 
-            if (practitionerResponse.ok) {
-                const practitionersData = await practitionerResponse.json()
-                setPractitioner(Array.isArray(practitionerData) ? practitionerData : [])
-            }
-
             // Fetch referrals sent
             const referralsSentResponse = await fetch(`http://127.0.0.1:8000/api/practicioners/${id}/referrals_sent`, {
                 method: 'GET',
