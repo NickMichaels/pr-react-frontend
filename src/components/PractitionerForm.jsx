@@ -9,10 +9,10 @@ function PractitionerForm({ onLogout }) {
 
     const [formData, setFormData] = useState({
         name: '',
-        address_line1: '',
-        city: '',
+        job_title: '',
+        license_number: '',
         state: '',
-        zip: '',
+        specialty: '',
         email: '',
         phone: ''
     })
@@ -55,10 +55,9 @@ function PractitionerForm({ onLogout }) {
             const data = await response.json()
             setFormData({
                 name: data.name || '',
-                address_line1: data.address_line1 || '',
-                city: data.city || '',
-                state: data.state || '',
-                zip: parseInt(data.zip) || '',
+                job_title: data.jobTitle || '',
+                license_number: data.licenseNumber || '',
+                specialty: data.specialty || '',
                 email: data.email || '',
                 phone: data.phone || ''
             })
@@ -92,10 +91,9 @@ function PractitionerForm({ onLogout }) {
             // Prepare request body - only include fields that have values
             const requestBody = {}
             if (formData.name) requestBody.name = formData.name
-            if (formData.address_line1) requestBody.address_line1 = formData.address_line1
-            if (formData.city) requestBody.city = formData.city
-            if (formData.state) requestBody.state = formData.state
-            if (formData.zip) requestBody.zip = parseInt(formData.zip)
+            if (formData.job_title) requestBody.job_title = formData.job_title
+            if (formData.license_number) requestBody.license_number = formData.license_number
+            if (formData.specialty) requestBody.specialty = formData.specialty
             if (formData.email) requestBody.email = formData.email
             if (formData.phone) requestBody.phone = formData.phone
 
@@ -198,51 +196,37 @@ function PractitionerForm({ onLogout }) {
                             </div>
 
                             <div class="mb-3">
-                                <label for="address_line1" class="form-label">Address Line 1</label>
+                                <label for="job_title" class="form-label">Job Title</label>
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="address_line1"
-                                    name="address_line1"
-                                    value={formData.address_line1}
+                                    id="job_title"
+                                    name="job_title"
+                                    value={formData.job_title}
                                     onChange={handleChange}
                                 />
                             </div>
 
                             <div class="mb-3">
-                                <label for="city" class="form-label">City</label>
+                                <label for="license_number" class="form-label">License Number</label>
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="city"
-                                    name="city"
-                                    value={formData.city}
+                                    id="license_number"
+                                    name="license_number"
+                                    value={formData.license_number}
                                     onChange={handleChange}
                                 />
                             </div>
 
                             <div class="mb-3">
-                                <label for="state" class="form-label">State</label>
+                                <label for="specialty" class="form-label">Specialty</label>
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="state"
-                                    name="state"
-                                    value={formData.state}
-                                    onChange={handleChange}
-                                    maxLength="2"
-                                    placeholder="e.g., CO"
-                                />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="zip" class="form-label">ZIP Code</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="zip"
-                                    name="zip"
-                                    value={formData.zip}
+                                    id="specialty"
+                                    name="specialty"
+                                    value={formData.specialty}
                                     onChange={handleChange}
                                 />
                             </div>

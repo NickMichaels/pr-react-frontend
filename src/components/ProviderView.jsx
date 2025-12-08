@@ -349,7 +349,10 @@ function ProviderView({ onLogout }) {
                           view
                         </a>
                         &nbsp;
-                        <a href="#" onClick={(e) => { e.preventDefault(); }}>
+                        <a href="#" onClick={(e) => {
+                          e.preventDefault()
+                          navigate(`/practitioners/${practitioner.id}/edit`)
+                        }}>
                           edit
                         </a>
                         &nbsp;
