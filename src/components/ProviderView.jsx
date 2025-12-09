@@ -306,7 +306,10 @@ function ProviderView({ onLogout }) {
                     Add a Practitioner
                   </button>
                   <button
-                    onClick={(e) => { e.preventDefault(); }}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      navigate(`/providers/${id}/referrals/new`)
+                    }}
                     class="btn btn-primary me-2"
                   >
                     Send a Patient Referral

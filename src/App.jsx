@@ -7,6 +7,7 @@ import ProviderView from './components/ProviderView'
 import PractitionerView from './components/PractitionerView'
 import PractitionerForm from './components/PractitionerForm'
 import PatientReferralView from './components/PatientReferralView'
+import PatientReferralForm from './components/PatientReferralForm'
 import { getToken } from './utils/auth'
 
 function App() {
@@ -121,6 +122,26 @@ function App() {
           element={
             isAuthenticated ? (
               <PatientReferralView onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/patientreferrals/:id/edit"
+          element={
+            isAuthenticated ? (
+              <PatientReferralForm onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/providers/:providerId/referrals/new"
+          element={
+            isAuthenticated ? (
+              <PatientReferralForm onLogout={handleLogout} />
             ) : (
               <Navigate to="/login" replace />
             )
