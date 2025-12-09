@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getToken } from '../utils/auth'
+import PatientReferralsSent from './PatientReferralsSent'
+import PatientReferralsReceived from './PatientReferralsReceived'
 
 function ProviderView({ onLogout }) {
   const { id } = useParams()
@@ -370,84 +372,8 @@ function ProviderView({ onLogout }) {
 
         {/* Referrals Section - Split 50/50 */}
         <div class="row mb-4">
-          <div class="col-md-6">
-            <h3>Patient Referrals Sent</h3>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Referral Details</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {referralsSent.length === 0 ? (
-                    <tr>
-                      <td>No referrals sent.</td>
-                    </tr>
-                  ) : (
-                    referralsSent.map((referral, index) => (
-                      <tr key={referral.id || index}>
-                        <td>
-                          {referral.patientName && <div><strong>Patient:</strong> {referral.patientName}</div>}
-                          {!referral.patientName && referral.patient && <div><strong>Patient:</strong> ID: {referral.patient} {loadingNames && '(loading...)'}</div>}
-                          {referral.receivingProviderName && <div><strong>Referred To:</strong> {referral.receivingProviderName}</div>}
-                          {!referral.receivingProviderName && referral.receivingProvider && <div><strong>Referred To:</strong> Provider ID: {referral.receivingProvider} {loadingNames && '(loading...)'}</div>}
-                          {referral.receivingPractitionerName && <div><strong>Receiving Practitioner:</strong> {referral.receivingPractitionerName}</div>}
-                          {!referral.receivingPractitionerName && referral.receivingPracticioner && <div><strong>Receiving Practitioner:</strong> ID: {referral.receivingPracticioner} {loadingNames && '(loading...)'}</div>}
-                          {referral.sendingProviderName && <div><strong>Sending Provider:</strong> {referral.sendingProviderName}</div>}
-                          {!referral.sendingProviderName && referral.sendingProvider && <div><strong>Sending Provider:</strong> Provider ID: {referral.sendingProvider} {loadingNames && '(loading...)'}</div>}
-                          {referral.sendingPractitionerName && <div><strong>Sending Practitioner:</strong> {referral.sendingPractitionerName}</div>}
-                          {!referral.sendingPractitionerName && referral.sendingPracticioner && <div><strong>Sending Practitioner:</strong> ID: {referral.sendingPracticioner} {loadingNames && '(loading...)'}</div>}
-                          {referral.dateSent && <div><strong>Date Sent:</strong> {new Date(referral.dateSent).toLocaleDateString()}</div>}
-                          {referral.status && <div><strong>Status:</strong> {referral.status}</div>}
-                          {referral.reason && <div><strong>Reason:</strong> {referral.reason}</div>}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h3>Patient Referrals Received</h3>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Referral Details</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {referralsReceived.length === 0 ? (
-                    <tr>
-                      <td>No referrals received.</td>
-                    </tr>
-                  ) : (
-                    referralsReceived.map((referral, index) => (
-                      <tr key={referral.id || index}>
-                        <td>
-                          {referral.patientName && <div><strong>Patient:</strong> {referral.patientName}</div>}
-                          {!referral.patientName && referral.patient && <div><strong>Patient:</strong> ID: {referral.patient} {loadingNames && '(loading...)'}</div>}
-                          {referral.sendingProviderName && <div><strong>Referred From:</strong> {referral.sendingProviderName}</div>}
-                          {!referral.sendingProviderName && referral.sendingProvider && <div><strong>Referred From:</strong> Provider ID: {referral.sendingProvider} {loadingNames && '(loading...)'}</div>}
-                          {referral.sendingPractitionerName && <div><strong>Sending Practitioner:</strong> {referral.sendingPractitionerName}</div>}
-                          {!referral.sendingPractitionerName && referral.sendingPracticioner && <div><strong>Sending Practitioner:</strong> ID: {referral.sendingPracticioner} {loadingNames && '(loading...)'}</div>}
-                          {referral.receivingProviderName && <div><strong>Receiving Provider:</strong> {referral.receivingProviderName}</div>}
-                          {!referral.receivingProviderName && referral.receivingProvider && <div><strong>Receiving Provider:</strong> Provider ID: {referral.receivingProvider} {loadingNames && '(loading...)'}</div>}
-                          {referral.receivingPractitionerName && <div><strong>Receiving Practitioner:</strong> {referral.receivingPractitionerName}</div>}
-                          {!referral.receivingPractitionerName && referral.receivingPracticioner && <div><strong>Receiving Practitioner:</strong> ID: {referral.receivingPracticioner} {loadingNames && '(loading...)'}</div>}
-                          {referral.dateSent && <div><strong>Date Sent:</strong> {new Date(referral.dateSent).toLocaleDateString()}</div>}
-                          {referral.status && <div><strong>Status:</strong> {referral.status}</div>}
-                          {referral.reason && <div><strong>Reason:</strong> {referral.reason}</div>}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <PatientReferralsSent referralsSent={referralsSent} />
+          <PatientReferralsReceived referralsReceived={referralsReceived} />
         </div>
       </div>
     </div>
