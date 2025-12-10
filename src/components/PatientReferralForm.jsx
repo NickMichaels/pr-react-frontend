@@ -124,9 +124,6 @@ function PatientReferralForm({ onLogout }) {
         receivingProvider: data.receivingProvider ? String(data.receivingProvider) : '',
         sendingPracticioner: data.sendingPracticioner ? String(data.sendingPracticioner) : '',
         receivingPracticioner: data.receivingPracticioner ? String(data.receivingPracticioner) : '',
-        reason: data.reason || '',
-        notes: data.notes || '',
-        priority: data.priority || ''
       })
 
       if (data.sendingProvider) {
@@ -184,16 +181,18 @@ function PatientReferralForm({ onLogout }) {
       }
 
       const payload = {}
-      if (formData.patient) payload.patient = parseInt(formData.patient)
-      if (formData.sendingProvider) payload.sendingProvider = parseInt(formData.sendingProvider)
-      if (formData.receivingProvider) payload.receivingProvider = parseInt(formData.receivingProvider)
-      if (formData.sendingPracticioner) payload.sendingPracticioner = parseInt(formData.sendingPracticioner)
-      if (formData.receivingPracticioner) payload.receivingPracticioner = parseInt(formData.receivingPracticioner)
+      if (formData.patient) payload.patient_id = parseInt(formData.patient)
+      if (formData.sendingProvider) payload.sending_provider_id = parseInt(formData.sendingProvider)
+      if (formData.receivingProvider) payload.receiving_provider_id = parseInt(formData.receivingProvider)
+      if (formData.sendingPracticioner) payload.sending_practicioner_id = parseInt(formData.sendingPracticioner)
+      if (formData.receivingPracticioner) payload.receiving_practicione_id = parseInt(formData.receivingPracticioner)
+
+      console.log(payload)
 
       //http://127.0.0.1:8000/api/providers/1/send_referral
       const url = isEditMode
         ? `http://127.0.0.1:8000/api/patientreferrals/${id}`
-        : 'http://127.0.0.1:8000/api/providers/' + payload.sendingProvider + '/send_referral'
+        : 'http://127.0.0.1:8000/api/providers/' + payload.sending_provider_id + '/send_referral'
 
       const method = isEditMode ? 'PATCH' : 'POST'
 
@@ -244,7 +243,7 @@ function PatientReferralForm({ onLogout }) {
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <a class="nav-link" href="#" onClick={(e) => { e.preventDefault(); navigate('/providers') }}>
-                  All Healthcare Providers
+                  Create Patient Referral
                 </a>
               </li>
             </ul>
