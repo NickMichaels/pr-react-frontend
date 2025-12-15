@@ -14,6 +14,7 @@ function ProviderView({ onLogout }) {
   const [referralsReceived, setReferralsReceived] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [deleteError, setDeleteError] = useState('')
   const [loadingNames, setLoadingNames] = useState(false)
 
   useEffect(() => {
@@ -208,6 +209,42 @@ function ProviderView({ onLogout }) {
     }
   }
 
+  const handleDeleteReferral = async (referralId) => {
+    if (!referralId) return
+
+    const confirmed = window.confirm('Are you sure you want to delete this patient referral? This action cannot be undone.')
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      setDeleteError('')
+      const token = getToken()
+      if (!token) {
+        throw new Error('No authentication token found')
+      }
+
+      const response = await fetch(`http://127.0.0.1:8000/api/patientreferrals/${referralId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || 'Failed to delete patient referral')
+      }
+
+      // Optimistically remove from both sent and received lists
+      setReferralsSent(prev => prev.filter(referral => referral.id !== referralId))
+      setReferralsReceived(prev => prev.filter(referral => referral.id !== referralId))
+    } catch (err) {
+      setDeleteError(err.message || 'Failed to delete patient referral')
+    }
+  }
+
   if (loading && !provider) {
     return (
       <div class="container-fluid">
@@ -256,6 +293,12 @@ function ProviderView({ onLogout }) {
         {error && (
           <div class="alert alert-danger" role="alert">
             {error}
+          </div>
+        )}
+
+        {deleteError && (
+          <div class="alert alert-danger" role="alert">
+            {deleteError}
           </div>
         )}
 
@@ -375,8 +418,14 @@ function ProviderView({ onLogout }) {
 
         {/* Referrals Section - Split 50/50 */}
         <div class="row mb-4">
-          <PatientReferralsSent referralsSent={referralsSent} />
-          <PatientReferralsReceived referralsReceived={referralsReceived} />
+          <PatientReferralsSent
+            referralsSent={referralsSent}
+            onDeleteReferral={handleDeleteReferral}
+          />
+          <PatientReferralsReceived
+            referralsReceived={referralsReceived}
+            onDeleteReferral={handleDeleteReferral}
+          />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-function PatientReferralsSent({ referralsSent }) {
+function PatientReferralsSent({ referralsSent, onDeleteReferral }) {
     const navigate = useNavigate()
 
     const formatDate = (dateString) => {
@@ -54,7 +54,15 @@ function PatientReferralsSent({ referralsSent }) {
                                             edit
                                         </a>
                                         &nbsp;
-                                        <a href="#" onClick={(e) => { e.preventDefault(); }}>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                if (onDeleteReferral) {
+                                                    onDeleteReferral(referral.id)
+                                                }
+                                            }}
+                                        >
                                             delete
                                         </a>
                                     </td>
