@@ -7,6 +7,7 @@ function ProvidersList({ onLogout }) {
   const navigate = useNavigate()
   const [providers, setProviders] = useState([])
   const [loading, setLoading] = useState(true)
+  const [deleteError, setDeleteError] = useState('')
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -57,6 +58,41 @@ function ProvidersList({ onLogout }) {
     })
   }
 
+  const handleDeleteProvider = async (providerId) => {
+    if (!providerId) return
+
+    const confirmed = window.confirm('Are you sure you want to delete this provider? This action cannot be undone.')
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      setDeleteError('')
+      const token = getToken()
+      if (!token) {
+        throw new Error('No authentication token found')
+      }
+
+      const response = await fetch(`http://127.0.0.1:8000/api/providers/${providerId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || 'Failed to delete provider')
+      }
+
+      // Remove from list
+      setProviders(prev => prev.filter(provider => provider.id !== providerId))
+    } catch (err) {
+      setDeleteError(err.message || 'Failed to delete provider')
+    }
+  }
+
   return (
     <div class="container-fluid">
       <nav class="navbar bg-primary navbar-expand-lg" data-bs-theme="dark">
@@ -103,6 +139,13 @@ function ProvidersList({ onLogout }) {
           </div>
         )}
 
+
+        {deleteError && (
+          <div class="alert alert-danger" role="alert">
+            {deleteError}
+          </div>
+        )}
+
         {!loading && !error && providers.length === 0 && (
           <div className="empty-message">No providers found.</div>
         )}
@@ -142,7 +185,13 @@ function ProvidersList({ onLogout }) {
                         edit
                       </a>
                       &nbsp;
-                      <a href="#">delete</a>
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleDeleteProvider(provider.id)
+                        }}
+                      >delete</a>
                     </td>
 
                   </tr>
