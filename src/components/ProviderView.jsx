@@ -357,12 +357,6 @@ function ProviderView({ onLogout }) {
                   >
                     Send a Patient Referral
                   </button>
-                  <button
-                    onClick={(e) => { e.preventDefault(); }}
-                    class="btn btn-primary"
-                  >
-                    Schedule a Patient
-                  </button>
                 </div>
               </div>
             </div>
