@@ -385,7 +385,10 @@ function ProviderView({ onLogout }) {
                     Edit Provider
                   </button>
                   <button
-                    onClick={(e) => { e.preventDefault(); }}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      navigate(`/providers/${id}/practitioners/add`)
+                    }}
                     class="btn btn-primary me-2"
                   >
                     Add a Practitioner
