@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getToken } from '../utils/auth'
-//import './ProvidersList.css'
 
 function ProvidersList({ onLogout }) {
   const navigate = useNavigate()
