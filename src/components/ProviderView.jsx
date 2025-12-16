@@ -87,28 +87,6 @@ function ProviderView({ onLogout }) {
     return null
   }
 
-  // Enrich referral with names
-  const enrichReferral = async (referral) => {
-    const enriched = { ...referral }
-
-    // Fetch all names in parallel
-    const [patientName, sendingProviderName, receivingProviderName, sendingPractitionerName, receivingPractitionerName] = await Promise.all([
-      referral.patient ? fetchPatientName(referral.patient) : Promise.resolve(null),
-      referral.sendingProvider ? fetchProviderName(referral.sendingProvider) : Promise.resolve(null),
-      referral.receivingProvider ? fetchProviderName(referral.receivingProvider) : Promise.resolve(null),
-      referral.sendingPracticioner ? fetchPractitionerName(referral.sendingPracticioner) : Promise.resolve(null),
-      referral.receivingPracticioner ? fetchPractitionerName(referral.receivingPracticioner) : Promise.resolve(null),
-    ])
-
-    enriched.patientName = patientName
-    enriched.sendingProviderName = sendingProviderName
-    enriched.receivingProviderName = receivingProviderName
-    enriched.sendingPractitionerName = sendingPractitionerName
-    enriched.receivingPractitionerName = receivingPractitionerName
-
-    return enriched
-  }
-
   const fetchProviderData = async () => {
     setLoading(true)
     setError('')
@@ -163,18 +141,7 @@ function ProviderView({ onLogout }) {
 
       if (referralsSentResponse.ok) {
         const referralsSentData = await referralsSentResponse.json()
-        const referralsArray = Array.isArray(referralsSentData) ? referralsSentData : []
-        setReferralsSent(referralsArray)
-
-        // Enrich referrals with names
-        if (referralsArray.length > 0) {
-          setLoadingNames(true)
-          const enrichedReferrals = await Promise.all(
-            referralsArray.map(referral => enrichReferral(referral))
-          )
-          setReferralsSent(enrichedReferrals)
-          setLoadingNames(false)
-        }
+        setReferralsSent(Array.isArray(referralsSentData) ? referralsSentData : [])
       }
 
       // Fetch referrals received
@@ -188,18 +155,7 @@ function ProviderView({ onLogout }) {
 
       if (referralsReceivedResponse.ok) {
         const referralsReceivedData = await referralsReceivedResponse.json()
-        const referralsArray = Array.isArray(referralsReceivedData) ? referralsReceivedData : []
-        setReferralsReceived(referralsArray)
-
-        // Enrich referrals with names
-        if (referralsArray.length > 0) {
-          setLoadingNames(true)
-          const enrichedReferrals = await Promise.all(
-            referralsArray.map(referral => enrichReferral(referral))
-          )
-          setReferralsReceived(enrichedReferrals)
-          setLoadingNames(false)
-        }
+        setReferralsReceived(Array.isArray(referralsReceivedData) ? referralsReceivedData : [])
       }
 
     } catch (err) {
