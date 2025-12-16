@@ -245,6 +245,48 @@ function ProviderView({ onLogout }) {
     }
   }
 
+  const handleRemovePractitioner = async (providerId, practitionerId) => {
+    if (!providerId) return
+    if (!practitionerId) return
+
+    const confirmed = window.confirm('Are you sure you want to remove this practitioner from this provider? This action cannot be undone.')
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      setDeleteError('')
+      const token = getToken()
+      if (!token) {
+        throw new Error('No authentication token found')
+      }
+
+
+      const payload = {
+        "practicioner_id": practitionerId
+      }
+
+      const response = await fetch(`http://127.0.0.1:8000/api/providers/${providerId}/remove_practicioner`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || 'Failed to remove practitioner from provider')
+      }
+
+      // Remove from list
+      setPractitioners(prev => prev.filter(practitioner => practitioner.id !== practitionerId))
+    } catch (err) {
+      setDeleteError(err.message || 'Failed to remove practitioner from provider')
+    }
+  }
+
   if (loading && !provider) {
     return (
       <div class="container-fluid">
@@ -398,8 +440,11 @@ function ProviderView({ onLogout }) {
                           edit
                         </a>
                         &nbsp;
-                        <a href="#" onClick={(e) => { e.preventDefault(); }}>
-                          delete
+                        <a href="#" onClick={(e) => {
+                          e.preventDefault();
+                          handleRemovePractitioner(id, practitioner.id)
+                        }}>
+                          remove
                         </a>
                       </td>
                     </tr>
