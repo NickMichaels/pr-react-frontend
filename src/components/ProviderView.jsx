@@ -48,7 +48,7 @@ function ProviderView({ onLogout }) {
     if (!practitionerId) return null
     try {
       const token = getToken()
-      const response = await fetch(`http://127.0.0.1:8000/api/practicioners/${practitionerId}`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/practitioners/${practitionerId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -117,7 +117,7 @@ function ProviderView({ onLogout }) {
       setProvider(providerData)
 
       // Fetch practitioners
-      const practitionersResponse = await fetch(`http://127.0.0.1:8000/api/providers/${id}/practicioners`, {
+      const practitionersResponse = await fetch(`http://127.0.0.1:8000/api/providers/${id}/practitioners`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -219,10 +219,10 @@ function ProviderView({ onLogout }) {
 
 
       const payload = {
-        "practicioner_id": practitionerId
+        "practitioner_id": practitionerId
       }
 
-      const response = await fetch(`http://127.0.0.1:8000/api/providers/${providerId}/remove_practicioner`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/providers/${providerId}/remove_practitioner`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

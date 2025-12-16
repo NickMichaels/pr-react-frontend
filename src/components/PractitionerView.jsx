@@ -46,7 +46,7 @@ function PractitionerView({ onLogout }) {
         if (!practitionerId) return null
         try {
             const token = getToken()
-            const response = await fetch(`http://127.0.0.1:8000/api/practicioners/${practitionerId}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/practitioners/${practitionerId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -94,8 +94,8 @@ function PractitionerView({ onLogout }) {
             referral.patient ? fetchPatientName(referral.patient) : Promise.resolve(null),
             referral.sendingProvider ? fetchProviderName(referral.sendingProvider) : Promise.resolve(null),
             referral.receivingProvider ? fetchProviderName(referral.receivingProvider) : Promise.resolve(null),
-            referral.sendingPracticioner ? fetchPractitionerName(referral.sendingPracticioner) : Promise.resolve(null),
-            referral.receivingPracticioner ? fetchPractitionerName(referral.receivingPracticioner) : Promise.resolve(null),
+            referral.sendingPractitioner ? fetchPractitionerName(referral.sendingPractitioner) : Promise.resolve(null),
+            referral.receivingPractitioner ? fetchPractitionerName(referral.receivingPractitioner) : Promise.resolve(null),
         ])
 
         enriched.patientName = patientName
@@ -118,7 +118,7 @@ function PractitionerView({ onLogout }) {
             }
 
             // Fetch provider details
-            const practitionerResponse = await fetch(`http://127.0.0.1:8000/api/practicioners/${id}`, {
+            const practitionerResponse = await fetch(`http://127.0.0.1:8000/api/practitioners/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -137,7 +137,7 @@ function PractitionerView({ onLogout }) {
             setPractitioner(practitionerData)
 
             // Fetch referrals sent
-            const referralsSentResponse = await fetch(`http://127.0.0.1:8000/api/practicioners/${id}/referrals_sent`, {
+            const referralsSentResponse = await fetch(`http://127.0.0.1:8000/api/practitioners/${id}/referrals_sent`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -162,7 +162,7 @@ function PractitionerView({ onLogout }) {
             }
 
             // Fetch referrals received
-            const referralsReceivedResponse = await fetch(`http://127.0.0.1:8000/api/practicioners/${id}/referrals_received`, {
+            const referralsReceivedResponse = await fetch(`http://127.0.0.1:8000/api/practitioners/${id}/referrals_received`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

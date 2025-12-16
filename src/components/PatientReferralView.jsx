@@ -43,7 +43,7 @@ function PatientReferralView({ onLogout }) {
     if (!practitionerId) return null
     try {
       const token = getToken()
-      const response = await fetch(`http://127.0.0.1:8000/api/practicioners/${practitionerId}`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/practitioners/${practitionerId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -94,8 +94,8 @@ function PatientReferralView({ onLogout }) {
       referralData.patient ? fetchPatientName(referralData.patient) : Promise.resolve(null),
       referralData.sendingProvider ? fetchProviderName(referralData.sendingProvider) : Promise.resolve(null),
       referralData.receivingProvider ? fetchProviderName(referralData.receivingProvider) : Promise.resolve(null),
-      referralData.sendingPracticioner ? fetchPractitionerName(referralData.sendingPracticioner) : Promise.resolve(null),
-      referralData.receivingPracticioner ? fetchPractitionerName(referralData.receivingPracticioner) : Promise.resolve(null),
+      referralData.sendingPractitioner ? fetchPractitionerName(referralData.sendingPractitioner) : Promise.resolve(null),
+      referralData.receivingPractitioner ? fetchPractitionerName(referralData.receivingPractitioner) : Promise.resolve(null),
     ])
 
     enriched.patientName = patientName
@@ -235,10 +235,10 @@ function PatientReferralView({ onLogout }) {
                 </div>
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <strong>Sending Practitioner:</strong> {displayData.sendingPractitionerName || (displayData.sendingPracticioner ? `ID: ${displayData.sendingPracticioner} ${loadingNames ? '(loading...)' : ''}` : 'N/A')}
+                    <strong>Sending Practitioner:</strong> {displayData.sendingPractitionerName || (displayData.sendingPractitioner ? `ID: ${displayData.sendingPractitioner} ${loadingNames ? '(loading...)' : ''}` : 'N/A')}
                   </div>
                   <div class="col-md-6">
-                    <strong>Receiving Practitioner:</strong> {displayData.receivingPractitionerName || (displayData.receivingPracticioner ? `ID: ${displayData.receivingPracticioner} ${loadingNames ? '(loading...)' : ''}` : 'N/A')}
+                    <strong>Receiving Practitioner:</strong> {displayData.receivingPractitionerName || (displayData.receivingPractitioner ? `ID: ${displayData.receivingPractitioner} ${loadingNames ? '(loading...)' : ''}` : 'N/A')}
                   </div>
                 </div>
                 {displayData.dateSent && (

@@ -23,7 +23,7 @@ function PractitionersList({ onLogout }) {
                 throw new Error('No authentication token found')
             }
 
-            const response = await fetch('http://127.0.0.1:8000/api/practicioners', {
+            const response = await fetch('http://127.0.0.1:8000/api/practitioners', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -72,7 +72,7 @@ function PractitionersList({ onLogout }) {
                 throw new Error('No authentication token found')
             }
 
-            const response = await fetch(`http://127.0.0.1:8000/api/practicioners/${practitionerId}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/practitioners/${practitionerId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

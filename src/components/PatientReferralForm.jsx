@@ -11,8 +11,8 @@ function PatientReferralForm({ onLogout }) {
     patient: '',
     sendingProvider: providerId || '',
     receivingProvider: '',
-    sendingPracticioner: '',
-    receivingPracticioner: '',
+    sendingPractitioner: '',
+    receivingPractitioner: '',
     reason: '',
     notes: '',
     priority: ''
@@ -122,8 +122,8 @@ function PatientReferralForm({ onLogout }) {
         patient: data.patient ? String(data.patient) : '',
         sendingProvider: data.sendingProvider ? String(data.sendingProvider) : '',
         receivingProvider: data.receivingProvider ? String(data.receivingProvider) : '',
-        sendingPracticioner: data.sendingPracticioner ? String(data.sendingPracticioner) : '',
-        receivingPracticioner: data.receivingPracticioner ? String(data.receivingPracticioner) : '',
+        sendingPractitioner: data.sendingPractitioner ? String(data.sendingPractitioner) : '',
+        receivingPractitioner: data.receivingPractitioner ? String(data.receivingPractitioner) : '',
       })
 
       if (data.sendingProvider) {
@@ -142,7 +142,7 @@ function PatientReferralForm({ onLogout }) {
   const fetchPractitionersForProvider = async (provider, setter) => {
     try {
       const token = getToken()
-      const response = await fetch(`http://127.0.0.1:8000/api/providers/${provider}/practicioners`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/providers/${provider}/practitioners`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -184,8 +184,8 @@ function PatientReferralForm({ onLogout }) {
       if (formData.patient) payload.patient_id = parseInt(formData.patient)
       if (formData.sendingProvider) payload.sending_provider_id = parseInt(formData.sendingProvider)
       if (formData.receivingProvider) payload.receiving_provider_id = parseInt(formData.receivingProvider)
-      if (formData.sendingPracticioner) payload.sending_practicioner_id = parseInt(formData.sendingPracticioner)
-      if (formData.receivingPracticioner) payload.receiving_practicione_id = parseInt(formData.receivingPracticioner)
+      if (formData.sendingPractitioner) payload.sending_practitioner_id = parseInt(formData.sendingPractitioner)
+      if (formData.receivingPractitioner) payload.receiving_practitioner_id = parseInt(formData.receivingPractitioner)
 
       //http://127.0.0.1:8000/api/providers/1/send_referral
       const url = isEditMode
@@ -320,12 +320,12 @@ function PatientReferralForm({ onLogout }) {
               </div>
 
               <div class="mb-3">
-                <label for="sendingPracticioner" class="form-label">Sending Practitioner (optional)</label>
+                <label for="sendingPractitioner" class="form-label">Sending Practitioner (optional)</label>
                 <select
-                  id="sendingPracticioner"
-                  name="sendingPracticioner"
+                  id="sendingPractitioner"
+                  name="sendingPractitioner"
                   class="form-select"
-                  value={formData.sendingPracticioner}
+                  value={formData.sendingPractitioner}
                   onChange={handleChange}
                 >
                   <option value="">Select a practitioner</option>
@@ -338,12 +338,12 @@ function PatientReferralForm({ onLogout }) {
               </div>
 
               <div class="mb-3">
-                <label for="receivingPracticioner" class="form-label">Receiving Practitioner (optional)</label>
+                <label for="receivingPractitioner" class="form-label">Receiving Practitioner (optional)</label>
                 <select
-                  id="receivingPracticioner"
-                  name="receivingPracticioner"
+                  id="receivingPractitioner"
+                  name="receivingPractitioner"
                   class="form-select"
-                  value={formData.receivingPracticioner}
+                  value={formData.receivingPractitioner}
                   onChange={handleChange}
                 >
                   <option value="">Select a practitioner</option>

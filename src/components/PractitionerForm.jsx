@@ -37,7 +37,7 @@ function PractitionerForm({ onLogout }) {
                 throw new Error('No authentication token found')
             }
 
-            const response = await fetch(`http://127.0.0.1:8000/api/practicioners/${id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/practitioners/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -98,8 +98,8 @@ function PractitionerForm({ onLogout }) {
             if (formData.phone) requestBody.phone = formData.phone
 
             const url = isEditMode
-                ? `http://127.0.0.1:8000/api/practicioners/${id}`
-                : 'http://127.0.0.1:8000/api/practicioners'
+                ? `http://127.0.0.1:8000/api/practitioners/${id}`
+                : 'http://127.0.0.1:8000/api/practitioners'
 
             const method = isEditMode ? 'PATCH' : 'POST'
 

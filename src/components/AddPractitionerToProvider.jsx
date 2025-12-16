@@ -27,7 +27,7 @@ function AddPractitionerToProvider({ onLogout }) {
         throw new Error('No authentication token found')
       }
 
-      const response = await fetch('http://127.0.0.1:8000/api/practicioners/', {
+      const response = await fetch('http://127.0.0.1:8000/api/practitioners/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -70,10 +70,10 @@ function AddPractitionerToProvider({ onLogout }) {
       }
 
       const payload = {
-        practicioner_id: selectedPractitioner
+        practitioner_id: selectedPractitioner
       }
 
-      const response = await fetch(`http://127.0.0.1:8000/api/providers/${id}/add_practicioner`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/providers/${id}/add_practitioner`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
