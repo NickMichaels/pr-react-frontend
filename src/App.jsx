@@ -4,6 +4,7 @@ import Login from './components/Login'
 import ProvidersList from './components/ProvidersList'
 import ProviderForm from './components/ProviderForm'
 import ProviderView from './components/ProviderView'
+import PractitionersList from './components/PractitionersList'
 import PractitionerView from './components/PractitionerView'
 import PractitionerForm from './components/PractitionerForm'
 import PatientReferralView from './components/PatientReferralView'
@@ -98,6 +99,17 @@ function App() {
             )
           }
         />
+        <Route
+          path="/practitioners"
+          element={
+            isAuthenticated ? (
+              <PractitionersList onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
         <Route
           path="/practitioners/new"
           element={
