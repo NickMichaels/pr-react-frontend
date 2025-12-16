@@ -241,7 +241,7 @@ function PatientReferralForm({ onLogout }) {
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <a class="nav-link" href="#" onClick={(e) => { e.preventDefault(); navigate('/providers') }}>
-                  Create Patient Referral
+                  {isEditMode ? 'Update Patient Referral' : 'Create Patient Referral'}
                 </a>
               </li>
             </ul>
@@ -255,7 +255,7 @@ function PatientReferralForm({ onLogout }) {
       <div class="container-fluid mt-4">
         <div class="row">
           <div class="col-md-8 offset-md-2">
-            <h2>{isEditMode ? 'Edit Patient Referral' : 'Create Patient Referral'}</h2>
+            <h2>{isEditMode ? 'Update Patient Referral' : 'Create Patient Referral'}</h2>
 
             {error && (
               <div class="alert alert-danger" role="alert">

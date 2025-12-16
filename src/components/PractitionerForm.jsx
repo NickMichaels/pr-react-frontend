@@ -153,7 +153,7 @@ function PractitionerForm({ onLogout }) {
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
                                 <a class="nav-link" href="#" onClick={(e) => { e.preventDefault(); navigate('/providers') }}>
-                                    All Healthcare Practitioners
+                                    {isEditMode ? 'Update Practitioner' : 'Create New Practitioner'}
                                 </a>
                             </li>
                         </ul>
