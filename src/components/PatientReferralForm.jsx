@@ -187,8 +187,6 @@ function PatientReferralForm({ onLogout }) {
       if (formData.sendingPracticioner) payload.sending_practicioner_id = parseInt(formData.sendingPracticioner)
       if (formData.receivingPracticioner) payload.receiving_practicione_id = parseInt(formData.receivingPracticioner)
 
-      console.log(payload)
-
       //http://127.0.0.1:8000/api/providers/1/send_referral
       const url = isEditMode
         ? `http://127.0.0.1:8000/api/patientreferrals/${id}`
