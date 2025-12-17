@@ -7,6 +7,9 @@ import ProviderView from './components/ProviderView'
 import PractitionersList from './components/PractitionersList'
 import PractitionerView from './components/PractitionerView'
 import PractitionerForm from './components/PractitionerForm'
+import PatientsList from './components/PatientsList'
+import PatientView from './components/PatientView'
+import PatientForm from './components/PatientForm'
 import PatientReferralView from './components/PatientReferralView'
 import PatientReferralForm from './components/PatientReferralForm'
 import AddPractitionerToProvider from './components/AddPractitionerToProvider'
@@ -109,7 +112,6 @@ function App() {
             )
           }
         />
-
         <Route
           path="/practitioners/new"
           element={
@@ -135,6 +137,46 @@ function App() {
           element={
             isAuthenticated ? (
               <PractitionerView onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/patients"
+          element={
+            isAuthenticated ? (
+              <PatientsList onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/patients/new"
+          element={
+            isAuthenticated ? (
+              <PatientForm onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/patients/:id/edit"
+          element={
+            isAuthenticated ? (
+              <PatientForm onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/patients/:id"
+          element={
+            isAuthenticated ? (
+              <PatientView onLogout={handleLogout} />
             ) : (
               <Navigate to="/login" replace />
             )
