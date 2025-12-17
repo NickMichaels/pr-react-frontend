@@ -206,6 +206,7 @@ function ProviderForm({ onLogout }) {
                   name="address_line1"
                   value={formData.address_line1}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
@@ -230,6 +231,7 @@ function ProviderForm({ onLogout }) {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
@@ -244,6 +246,7 @@ function ProviderForm({ onLogout }) {
                   onChange={handleChange}
                   maxLength="2"
                   placeholder="e.g., CO"
+                  required
                 />
               </div>
 
@@ -256,6 +259,7 @@ function ProviderForm({ onLogout }) {
                   name="zip"
                   value={formData.zip}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
@@ -268,6 +272,7 @@ function ProviderForm({ onLogout }) {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
@@ -281,6 +286,7 @@ function ProviderForm({ onLogout }) {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="e.g., 123-415-9876"
+                  required
                 />
               </div>
 
