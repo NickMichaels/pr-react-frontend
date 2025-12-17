@@ -15,7 +15,7 @@ function PatientReferralsReceived({ referralsReceived, onDeleteReferral }) {
 
     return (
         <div class="col-md-6">
-            <h3>Patient Referrals Sent</h3>
+            <h3>Patient Referrals Received</h3>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
