@@ -26,6 +26,7 @@ function PatientReferralForm({ onLogout }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [sendingProviderName, setSendingProviderName] = useState('')
 
   const sendingProviderId = useMemo(() => formData.sendingProvider, [formData.sendingProvider])
 
@@ -54,6 +55,36 @@ function PatientReferralForm({ onLogout }) {
       setReceivingPractitioners([])
     }
   }, [formData.receivingProvider])
+
+  useEffect(() => {
+    if (formData.sendingProvider && !providerId) {
+      // Update name when sendingProvider changes (e.g., in edit mode)
+      fetchProviderName(formData.sendingProvider).then(name => {
+        setSendingProviderName(name || '')
+      })
+    }
+  }, [formData.sendingProvider, providerId])
+
+  const fetchProviderName = async (providerId) => {
+    if (!providerId) return null
+    try {
+      const token = getToken()
+      const response = await fetch(`http://127.0.0.1:8000/api/providers/${providerId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        return data.name || null
+      }
+    } catch (err) {
+      console.error(`Error fetching provider ${providerId}:`, err)
+    }
+    return null
+  }
 
   const loadInitialData = async () => {
     setLoading(true)
@@ -90,6 +121,11 @@ function PatientReferralForm({ onLogout }) {
       setProviders(
         providerList.filter(p => String(p.id) !== String(providerId || formData.sendingProvider))
       )
+      if (providerId) {
+        const name = await fetchProviderName(providerId)
+        setSendingProviderName(name || '')
+      }
+
     } catch (err) {
       setError(err.message || 'Failed to load data')
     } finally {
@@ -129,6 +165,8 @@ function PatientReferralForm({ onLogout }) {
 
       if (data.sendingProvider) {
         fetchPractitionersForProvider(String(data.sendingProvider), setSendingPractitioners)
+        const name = await fetchProviderName(String(data.sendingProvider))
+        setSendingProviderName(name || '')
       }
       if (data.receivingProvider) {
         fetchPractitionersForProvider(String(data.receivingProvider), setReceivingPractitioners)
@@ -188,7 +226,6 @@ function PatientReferralForm({ onLogout }) {
       if (formData.sendingPractitioner) payload.sending_practitioner_id = parseInt(formData.sendingPractitioner)
       if (formData.receivingPractitioner) payload.receiving_practitioner_id = parseInt(formData.receivingPractitioner)
 
-      //http://127.0.0.1:8000/api/providers/1/send_referral
       const url = isEditMode
         ? `http://127.0.0.1:8000/api/patientreferrals/${id}`
         : 'http://127.0.0.1:8000/api/providers/' + payload.sending_provider_id + '/send_referral'
@@ -209,7 +246,7 @@ function PatientReferralForm({ onLogout }) {
         throw new Error(errorData.message || 'Failed to save referral')
       }
 
-      setSuccess(`Referral ${isEditMode ? 'updated' : 'created'} successfully!`)
+      setSuccess(`Referral ${isEditMode ? 'updated' : 'sent'} successfully!`)
       const redirectProviderId = formData.sendingProvider || providerId
       setTimeout(() => {
         if (redirectProviderId) {
@@ -237,7 +274,7 @@ function PatientReferralForm({ onLogout }) {
       <div class="container-fluid mt-4">
         <div class="row">
           <div class="col-md-8 offset-md-2">
-            <h2>{isEditMode ? 'Update Patient Referral' : 'Create Patient Referral'}</h2>
+            <h2>{isEditMode ? 'Update Patient Referral' : 'Send Patient Referral'}</h2>
 
             {error && (
               <div class="alert alert-danger" role="alert">
@@ -276,7 +313,7 @@ function PatientReferralForm({ onLogout }) {
                 <input
                   type="text"
                   class="form-control"
-                  value={sendingProviderId || ''}
+                  value={sendingProviderName || ''}
                   disabled
                   placeholder="Sending provider id"
                 />
@@ -343,7 +380,7 @@ function PatientReferralForm({ onLogout }) {
                   class="btn btn-primary"
                   disabled={loading}
                 >
-                  {loading ? 'Saving...' : isEditMode ? 'Update Referral' : 'Create Referral'}
+                  {loading ? 'Saving...' : isEditMode ? 'Update Referral' : 'Send Referral'}
                 </button>
                 <button
                   type="button"
