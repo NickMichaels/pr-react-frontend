@@ -2,6 +2,11 @@
 
 React frontend application for the [Patient Referral App](https://github.com/NickMichaels/patient-referral-app). Instead of scribbled down phone numbers from a PCP putting all of the onus on the patient to take next steps, healthcare providers can send patient referrals directly to another provider.
 
+<p align="center">
+  <img src="assets/patient_referral_send.png" alt="Send a Patient Referral" width="500">
+  <img src="assets/provider_view.png" alt="Provider Dashboard" width="500">
+</p>
+
 ## Features
 
 - Login form that authenticates with the Symfony backend API
@@ -63,7 +68,21 @@ See [API Docs](https://github.com/NickMichaels/patient-referral-app/blob/main/do
 - `GET api/practitioners/{id}/referrals_received` - Get all patient referrals received by a practitioner
 - `GET/PATCH/DELETE api/patientreferrals/{id}` - Get, update or delete one patient referral
 
+## More Screenshots
 
+<p align="center">
+  <img src="assets/practitioner_view.png" alt="Practitioner View" width="500">
+</p>
+<p align="center">
+  <img src="assets/patient_view.png" alt="Patient View" width="500">
+  <img src="assets/patient_referral_view.png" alt="Patient Referral View" width="500">
+</p>
+<p align="center">
+  <img src="assets/add_practitioner_to_provider.png" alt="Add Practitioner to Provider" width="500">
+</p>
+<p align="center">
+  <img src="assets/login_screen.png" alt="Login Screen" width="300">
+</p>
 
 
 
