@@ -10,7 +10,9 @@ function ProviderForm({ onLogout }) {
 
   const [formData, setFormData] = useState({
     name: '',
+    specialty: '',
     address_line1: '',
+    address_line2: '',
     city: '',
     state: '',
     zip: '',
@@ -56,7 +58,9 @@ function ProviderForm({ onLogout }) {
       const data = await response.json()
       setFormData({
         name: data.name || '',
-        address_line1: data.address_line1 || '',
+        address_line1: data.addressLine1 || '',
+        address_line2: data.addressLine2 || '',
+        specialty: data.specialty || '',
         city: data.city || '',
         state: data.state || '',
         zip: parseInt(data.zip) || '',
@@ -93,7 +97,9 @@ function ProviderForm({ onLogout }) {
       // Prepare request body - only include fields that have values
       const requestBody = {}
       if (formData.name) requestBody.name = formData.name
+      if (formData.specialty) requestBody.specialty = formData.specialty
       if (formData.address_line1) requestBody.address_line1 = formData.address_line1
+      if (formData.address_line2) requestBody.address_line2 = formData.address_line2
       if (formData.city) requestBody.city = formData.city
       if (formData.state) requestBody.state = formData.state
       if (formData.zip) requestBody.zip = parseInt(formData.zip)
@@ -180,6 +186,18 @@ function ProviderForm({ onLogout }) {
               </div>
 
               <div class="mb-3">
+                <label for="specialty" class="form-label">Specialty</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="specialty"
+                  name="specialty"
+                  value={formData.specialty}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div class="mb-3">
                 <label for="address_line1" class="form-label">Address Line 1</label>
                 <input
                   type="text"
@@ -187,6 +205,18 @@ function ProviderForm({ onLogout }) {
                   id="address_line1"
                   name="address_line1"
                   value={formData.address_line1}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="address_line2" class="form-label">Address Line 2</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address_line2"
+                  name="address_line2"
+                  value={formData.address_line2}
                   onChange={handleChange}
                 />
               </div>

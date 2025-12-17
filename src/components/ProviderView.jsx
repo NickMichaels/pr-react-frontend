@@ -227,15 +227,23 @@ function ProviderView({ onLogout }) {
                     <strong>Name:</strong> {provider.name || 'N/A'}
                   </div>
                   <div class="col-md-6">
-                    <strong>Email:</strong> {provider.email || 'N/A'}
+                    <strong>Specialty:</strong> {provider.specialty || 'N/A'}
                   </div>
                 </div>
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <strong>Phone:</strong> {provider.phone || 'N/A'}
+                    <strong>Email:</strong> {provider.email || 'N/A'}
                   </div>
                   <div class="col-md-6">
-                    <strong>Address:</strong> {provider.address_line1 || 'N/A'}
+                    <strong>Phone:</strong> {provider.phone || 'N/A'}
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <strong>Address Line 1:</strong> {provider.addressLine1 || 'N/A'}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>Address Line 2:</strong> {provider.addressLine2 || 'N/A'}
                   </div>
                 </div>
                 <div class="row mb-3">
