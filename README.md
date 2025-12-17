@@ -1,6 +1,6 @@
 # Patient Referral App - Frontend
 
-React frontend application for the Patient Referral App.
+React frontend application for the [Patient Referral App](https://github.com/NickMichaels/patient-referral-app). Instead of scribbled down phone numbers from a PCP putting all of the onus on the patient to take next steps, healthcare providers can send patient referrals directly to another provider.
 
 ## Features
 
